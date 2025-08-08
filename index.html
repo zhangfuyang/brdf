@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XB3PR2Y1TQ"></script> -->
+    <!-- <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-XB3PR2Y1TQ');
+    </script> -->
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>MVDiffusion: Enabling Holistic Multi-view Image Generation with Correspondence-Aware Diffusion</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,500,600' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/assets/css/Highlight-Clean.css">
+    <link rel="stylesheet" href="/assets/css/styles.css">
+
+    <link rel="manifest" href="/site.webmanifest">
+
+    <meta property="og:site_name" content="MVDiffusion" />
+    <meta property="og:type" content="video.other" />
+    <meta property="og:title" content="MVDiffusion: Enabling Holistic Multi-view Image Generation with Correspondence-Aware Diffusion" />
+    <meta property="og:description" content="MVDiffusion, 2023." />
+    <meta property="og:url" content="https://mvdiffusion.github.io/" />
+
+    <meta property="article:publisher" content="https://mvdiffusion.github.io/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="MVDiffusion: Enabling Holistic Multi-view Image Generation with Correspondence-Aware Diffusion" />
+    <meta name="twitter:url" content="https://mvdiffusion.github.io/" />
+    <!-- <meta name="twitter:image" content="https://dreamfusion3d.github.io/assets/images/dreamfusion_samples.png" /> -->
+    <!-- <meta name="twitter:site" content="" /> -->
+
+    <script src="assets/js/video_comparison.js"></script>
+    <script type="module" src="https://unpkg.com/@google/model-viewer@2.0.1/dist/model-viewer.min.js"></script>
+
+    <style>
+    .expandable-content {
+      display: none;
+    }
+    .expanded {
+      display: block;
+    }
+    .expand-link {
+      cursor: pointer;
+      color: blue;
+      text-decoration: underline;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="highlight-clean" style="padding-bottom: 10px;">
+        <div class="container" style="max-width: 1000px;">
+            <h1 class="text-center"><b>MVDiffusion</b>: Enabling Holistic Multi-view Image Generation with Correspondence-Aware Diffusion </h1>
+            <h5 class="text-center"> <b>NeurIPS 2023 (spotlight)</b> </h5>
+        </div>
+        <div class="container" style="max-width: 980px;">
+            <div class="row authors">
+                <div class="col">
+                    <h5 class="text-center"><a class="text-center" href="https://tangshitao.github.io/">Shitao Tang<sup>*1</sup> </a></h5>
+                </div>
+                <div class="col">
+                    <h5 class="text-center"><a href="https://zhangfuyang.github.io/">Fuyang Zhang<sup>*1</sup></a></h5>
+                </div>
+                <div class="col">
+                    <h5 class="text-center"><a class="text-center" href="https://jcchen.me/">Jiacheng Chen<sup>1</sup></a></h5>
+                </div>
+                <div class="col">
+                    <h5 class="text-center"><a class="text-center" href="https://pengwangucla.github.io/peng-wang.github.io/">Peng Wang<sup>2</sup></a></h5>
+                </div>
+                <div class="col">
+                    <h5 class="text-center"><a class="text-center" href="https://www.cs.sfu.ca/~furukawa/">Yasutaka Furukawa<sup>1</sup></a></h5>
+                </div>
+            </div>
+            <div class="row affiliations">
+                <div class="col">
+                    <h6 class="text-center"><a class="text-center"><sup>1</sup>Simon Fraser University</a></h6>
+                </div>
+                <div class="col">
+                    <h6 class="text-center"><a class="text-center"><sup>2</sup>Bytedance</a></h6>
+                </div>
+            </div>
+        </div>
+        <div class="buttons" style="margin-bottom: 8px;">
+            <a class="btn btn-light" role="button" href="https://arxiv.org/abs/2307.01097">
+                <svg style="width:24px;height:24px;margin-left:-12px;margin-right:12px" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M16 0H8C6.9 0 6 .9 6 2V18C6 19.1 6.9 20 8 20H20C21.1 20 22 19.1 22 18V6L16 0M20 18H8V2H15V7H20V18M4 4V22H20V24H4C2.9 24 2 23.1 2 22V4H4M10 10V12H18V10H10M10 14V16H15V14H10Z"></path>
+                </svg>arXiv
+            </a>
+            <a class="btn btn-light" role="button" href="assets/mvdiffusion_paper.pdf">
+                <svg style="width:24px;height:24px;margin-left:-12px;margin-right:12px" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M16 0H8C6.9 0 6 .9 6 2V18C6 19.1 6.9 20 8 20H20C21.1 20 22 19.1 22 18V6L16 0M20 18H8V2H15V7H20V18M4 4V22H20V24H4C2.9 24 2 23.1 2 22V4H4M10 10V12H18V10H10M10 14V16H15V14H10Z"></path>
+                </svg>PDF
+            </a>
+            <a class="btn btn-light disabled border border-dark" aria-disabled="true" role="button" href="#">
+                <svg style="visibility:hidden;width:0px;height:24px;margin-left:-12px;margin-right:12px" width="0px" height="24px" viewBox="0 0 375 531">
+                    <polygon stroke="#000000" points="0.5,0.866 459.5,265.87 0.5,530.874 "/>
+                </svg>
+                Project
+            </a>
+            <a class="btn btn-light" role="button" href="https://github.com/Tangshitao/MVDiffusion">
+                <svg xmlns="http://www.w3.org/2000/svg" style="width:24px;height:24px;margin-left:-12px;margin-right:12px" viewBox="0 0 24 24">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 
+                            1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 
+                            3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 
+                            2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+                Code
+            </a>
+            <a class="btn btn-light" role="button" href="gallery.html">
+                <svg style="width:24px;height:24px;margin-left:-12px;margin-right:12px" width="24px" height="24px" viewBox="0 0 375 531">
+                    <polygon stroke="#000000" points="0.5,0.866 459.5,265.87 0.5,530.874 "/>
+                </svg>
+                Gallery
+            </a>
+            <a class="btn btn-light" role="button" href="https://huggingface.co/spaces/tangshitao/MVDiffusion">
+                <img style="width:24px;height:24px;margin-left:-1px;margin-right:8px" width="24px" height="24px" viewBox="0 0 375 531" src="hf-logo.svg" alt="Hugging Face Logo">
+                Demo
+            </a>
+        </div>
+    </div>
+	<div class="container" style="max-width: 768px;">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Abstract</h2>
+                <p>
+                    This paper introduces <em>MVDiffusion</em>, a simple yet effective method for generating
+                    consistent multi-view images from text prompts given pixel-to-pixel correspondences (e.g., perspective crops from a panorama or multi-view images given depth maps and poses). 
+                    <span id="expand_button" class="expand-link" onclick="expand('expand_button', 'long-abs', 'collapse_button')">[Expand]</span>
+                    <span id="long-abs" class="expandable-content">
+                        Unlike prior methods that rely on iterative image warping and inpainting, MVDiffusion simultaneously generates all images with a global awareness, effectively addressing the prevalent error accumulation issue. At its core, MVDiffusion processes perspective images in parallel with a pre-trained text-toimage diffusion model, while integrating novel correspondence-aware attention layers to facilitate cross-view interactions. For panorama generation, while only trained with 10k panoramas, MVDiffusion is able to generate high-resolution photorealistic images for arbitrary texts or extrapolate one perspective image to a 360-degree view. For multi-view depth-to-image generation, MVDiffusion demonstrates state-of-the-art performance for texturing a scene mesh.
+                    </span>
+                    <p id="collapse_button" class="expand-link" style="display: none;" onclick="collapse('expand_button', 'long-abs', 'collapse_button')">[Collapse]</p>
+                </p>
+            </div>
+            <script>
+                function expand(exp_buttonId, longId, col_buttonID) {
+                  var expElement = document.getElementById(exp_buttonId);
+                  var longElement = document.getElementById(longId);
+                  var colElement = document.getElementById(col_buttonID);
+                  expElement.style.display = 'none';
+                  longElement.style.display = 'inline';
+                  colElement.style.display = 'block';
+                }
+
+                function collapse(exp_buttonId, longId, col_buttonID) {
+                  var expElement = document.getElementById(exp_buttonId);
+                  var longElement = document.getElementById(longId);
+                  var colElement = document.getElementById(col_buttonID);
+                  expElement.style.display = 'inline';
+                  longElement.style.display = 'none';
+                  colElement.style.display = 'none';
+                }
+            </script>
+        </div>
+    </div>
+    <hr class="divider" />
+    <div class="container" style="max-width: 768px;">
+        <div class="row captioned_videos">
+            <div class="col-md-12">
+                <img src="assets/images/teaser_v2.gif" alt="Image Description" style="width:100%">
+                <h6 class="caption"> Given text descriptions, MVDiffusion generates holistically consistent multi-view images with high resolution and rich content, which benefits practical tasks such as panorama generation and multi-view depth-to-image generation. </h6>
+            </div>
+        </div>
+    </div>
+    <hr class="divider" />
+    <div class="container" style="max-width: 768px;">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Results showcase</h2>
+                <p> We show the capacity of MVDiffusion on two challanging multi-view image generation tasks: 1) panorama generation and 2) multi-view depth-to-image generation. </p>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="container" style="max-width: 768px;">
+        <div class="row">
+            <div class="col-md-12">
+                <h4>Task 1: Panorama generation </h4>
+                <h6> (Note: click the text to view the stitched panorama image) </h6>
+                <p> Examples results of panorama generation from text prompts using MVDiffusion. Check out our online <a href='https://huggingface.co/spaces/tangshitao/MVDiffusion'>demo</a> to generate panorama images using your own descriptions. </p>
+            </div>
+        </div>
+
+        <table> 
+            <tbody>
+                <tr style="display:table-row; text-align: center;">
+                    <td>
+                        <div class="col-md-12">
+                            <video class="video lazy d-xs-none d-sm-block" autoplay loop playsinline muted> 
+                                <source src="pics/panorama/1_h264.mp4" type="video/mp4"> 
+                                Your browser does not support the video tag.  
+                            </video>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="col-md-12">
+                            <video class="video lazy d-xs-none d-sm-block" autoplay loop playsinline muted>
+                                <source src="pics/panorama/2_h264.mp4" type="video/mp4"> 
+                                Your browser does not support the video tag.  
+                            </video> 
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center; padding-bottom: 3%; width: 50%;">
+                        <div class="col-md-12">
+                            <button class="pano_button" onclick="openImage('pics/panorama/1_crop.png')">
+                                <div class="pano_text", style="width:100%">
+                                    This kitchen is a charming blend of rustic and modern, featuring a large reclaimed wood island with marble countertop, a sink surrounded by cabinets. To the left of the island, a stainless-steel refrigerator stands tall. To the right of the sink, built-in wooden cabinets painted in a muted.
+                                </div>
+                            </button>
+                        </div>
+                    </td>
+                    <td style="text-align: center; padding-bottom: 3%; width: 50%;">
+                        <div class="col-md-12">
+                            <button class="pano_button" onclick="openImage('pics/panorama/2_crop.png')">
+                                <div class="pano_text", style="width:100%">
+                                    Majestically rising towards the heavens, the snow-capped mountain stood, its jagged peaks cloaked in a shroud of ethereal clouds, its rugged slopes a stark contrast against the serene azure sky, and its silent grandeur exuding an air of ancient wisdom and timeless solitude, commanding awe and reverence from all who beheld it.
+                                </div>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr style="display:table-row; text-align: center;">
+                    <td>
+                        <div class="col-md-12">
+                            <video class="video lazy d-xs-none d-sm-block" autoplay loop playsinline muted> 
+                                <source src="pics/panorama/3_h264.mp4" type="video/mp4"> 
+                                Your browser does not support the video tag.  
+                            </video>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="col-md-12">
+                            <video class="video lazy d-xs-none d-sm-block" autoplay loop playsinline muted>
+                                <source src="pics/panorama/4_h264.mp4" type="video/mp4"> 
+                                Your browser does not support the video tag.  
+                            </video> 
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center; padding-bottom: 3%; width: 50%;">
+                        <div class="col-md-12">
+                            <button class="pano_button" onclick="openImage('pics/panorama/3_crop.png')">
+                                <div class="pano_text", style="width:100%">
+                                    Bathed in the soft, dappled light of the setting sun, the silent street lay undisturbed, revealing the grandeur of its cobblestone texture, the rusted lampposts bearing witness to forgotten stories, and the ancient, ivy-clad houses standing stoically, their shuttered windows and weather-beaten doors speaking volumes about their passage through time.
+                                </div>
+                            </button>
+                        <div class="col-md-12">
+                    </td>
+                    <td style="text-align: center; padding-bottom: 3%; width: 50%;">
+                        <div class="col-md-12">
+                            <button class="pano_button" onclick="openImage('pics/panorama/4_crop.png')">
+                                <div class="pano_text", style="width:100%">
+                                    A versatile room with a sofa as the centerpiece, accompanied by various elements such as plants, a bookshelf, a lamp, a TV, games, a desk, a dining table, chairs, art, music, a yoga mat, and a meditation corner, providing a space for relaxation, reading, entertainment, work, gatherings, creativity, and tranquility.
+                                </div>
+                            </button>
+                        <div class="col-md-12">
+                    </td>
+                </tr>
+
+                <tr style="display:table-row; text-align: center;">
+                    <td>
+                        <div class="col-md-12">
+                            <video class="video lazy d-xs-none d-sm-block" autoplay loop playsinline muted> 
+                                <source src="pics/panorama/5_h264.mp4" type="video/mp4"> 
+                                Your browser does not support the video tag.  
+                            </video>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="col-md-12">
+                            <video class="video lazy d-xs-none d-sm-block" autoplay loop playsinline muted>
+                                <source src="pics/panorama/6_h264.mp4" type="video/mp4"> 
+                                Your browser does not support the video tag.  
+                            </video> 
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center; padding-bottom: 3%; width: 50%;">
+                        <div class="col-md-12">
+                            <button class="pano_button" onclick="openImage('pics/panorama/5_crop.png')">
+                                <div class="pano_text", style="width:100%">
+                                    A versatile room with a sofa as the centerpiece, accompanied by various elements such as plants, a bookshelf, a lamp, a TV, games, a desk, a dining table, chairs, art, music, a yoga mat, and a meditation corner, providing a space for relaxation, reading, entertainment, work, gatherings, creativity, and tranquility. <span style="font-weight: bold;">In cartoon-style.</span>
+                                </div>
+                            </button>
+                        <div class="col-md-12">
+                    </td>
+                    <td style="text-align: center; padding-bottom: 3%; width: 50%;">
+                        <div class="col-md-12">
+                            <button class="pano_button" onclick="openImage('pics/panorama/6_crop.png')">
+                                <div class="pano_text", style="width:100%">
+                                    A versatile room with a sofa as the centerpiece, accompanied by various elements such as plants, a bookshelf, a lamp, a TV, games, a desk, a dining table, chairs, art, music, a yoga mat, and a meditation corner, providing a space for relaxation, reading, entertainment, work, gatherings, creativity, and tranquility. <span style="font-weight: bold;">In oil-painting style.</span>
+                                </div>
+                            </button>
+                        <div class="col-md-12">
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <br>
+    <br>
+
+    <div class="container" style="max-width: 768px;">
+        <div class="row">
+            <div class="col-sm-12">
+                <h4>Task 2: Multi-view depth-to-image generation</h4>
+                <p>Given a sequence of depth maps from a raw mesh, MVDiffusion can generate a sequence of RGB images while preserving the underlying geometry and 
+                    maintaining multi-view consistency. The generation results can be further exported to a textured mesh. Check out more results in the <a href='gallery.html'>gallery</a> page. </p>
+            </div>
+        </div>
+		
+        <div class="row captioned_videos meshes" id="randomVideos">
+            <div class="col-4">
+                <p class="text-center">Mesh w/o texture</p>
+            </div>
+            <div class="col-4">
+                <p class="text-center">Input depth | Pred texture</p>
+            </div>
+            <div class="col-4 controls">
+                <button class="btn btn-primary loads-model" data-controls="mesh-scene0760_00_0" data-action="load">Load 3D model</button>
+            </div>
+            <div class="col-4">
+                <img src="/assets/meshes2/scene0760_00_0_non_texture.png" alt="" style="width: 100%">
+            </div>
+            <div class="col-4">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="ex3" loop playsinline autoplay muted onplay="resizeAndPlay(this)" style="height: 0px;">
+                        <source data-src="https://www.sfu.ca/~fuyangz/mvdiffusion/depth_video/scene0760_00_0.mp4" type="video/mp4"></source>
+                    </video>
+                    <canvas height="752" class="videoMerge" id="ex3Merge" width="1002"></canvas>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-4 my-auto">
+                <model-viewer ar="true" ar-modes="webxr scene-viewer quick-look" loading="lazy" reveal="manual" 
+							  style="height: 180px; width: 100%;" camera-controls="true" touch-action="pan-y" 
+							  shadow-intensity="1" exposure="1" src="https://www.sfu.ca/~fuyangz/mvdiffusion/mesh/scene0760_00_0.glb" 
+							  poster="/assets/meshes2/scene0760_00_0.png" id="mesh-scene0760_00_0" ar-status="not-presenting">
+                </model-viewer>
+            </div>
+            <div class="col-md-12">
+                <p class="text-center">Prompt: An office with a computer desk, a bookcase, a couch, chairs and a trash can. Two monitors and a keyboard are on the desk. 
+                        Couches is sitting next to the desk.</p>
+            </div>
+        </div>
+		
+        <div class="row captioned_videos meshes" id="randomVideos-2">
+            <div class="col-4">
+                <p class="text-center">Mesh w/o texture</p>
+            </div>
+            <div class="col-4">
+                <p class="text-center">Input depth | Pred texture</p>
+            </div>
+            <div class="col-4 controls">
+                    <button class="btn btn-primary loads-model" data-controls="mesh-scene0733_00_0" data-action="load">Load 3D model</button>
+            </div>
+            <div class="col-4">
+                <img src="/assets/meshes2/scene0733_00_0_non_texture.png" alt="" style="width: 100%">
+            </div>
+			<div class="col-4">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="ex4" loop playsinline autoplay muted onplay="resizeAndPlay(this)" style="height: 0px;">
+                        <source data-src="https://www.sfu.ca/~fuyangz/mvdiffusion/depth_video/scene0733_00_0.mp4" type="video/mp4"></source>
+                    </video>
+                    <canvas height="752" class="videoMerge" id="ex4Merge" width="1002"></canvas>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-4 my-auto">
+                <model-viewer ar="true" ar-modes="webxr scene-viewer quick-look" loading="lazy" reveal="manual" 
+							  style="height: 180px; width: 100%;" camera-controls="true" touch-action="pan-y" 
+							  shadow-intensity="1" exposure="1" src="https://www.sfu.ca/~fuyangz/mvdiffusion/mesh/scene0733_00_0.glb" 
+							  poster="/assets/meshes2/scene0733_00_0.png" id="mesh-scene0733_00_0" ar-status="not-presenting">
+                </model-viewer>
+            </div>
+            <div class="col-md-12">
+                <p class="text-center">Prompt: A living room with multiple couches and a coffee table. A wooden book shelf filled with lots of books next to a door. 
+                    A white refrigerator sitting next to a wooden bench.</p>
+            </div>
+        </div>
+		
+		<div class="row captioned_videos meshes" id="randomVideos-3">
+            <div class="col-4">
+                <p class="text-center">Mesh w/o texture</p>
+            </div>
+            <div class="col-4">
+                <p class="text-center">Input depth | Pred texture</p>
+            </div>
+            <div class="col-4 controls">
+                    <button class="btn btn-primary loads-model" data-controls="mesh-scene0741_00_0" data-action="load">Load 3D model</button>
+            </div>
+            <div class="col-4">
+                <img src="/assets/meshes2/scene0741_00_0_non_texture.png" alt="" style="width: 100%">
+            </div>
+			<div class="col-4">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="ex5" loop playsinline autoplay muted onplay="resizeAndPlay(this)" style="height: 0px;">
+                        <source data-src="https://www.sfu.ca/~fuyangz/mvdiffusion/depth_video/scene0741_00_0.mp4" type="video/mp4"></source>
+                    </video>
+                    <canvas height="752" class="videoMerge" id="ex5Merge" width="1002"></canvas>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-4 my-auto">
+                <model-viewer ar="true" ar-modes="webxr scene-viewer quick-look" loading="lazy" reveal="manual" 
+							  style="height: 180px; width: 100%;" camera-controls="true" touch-action="pan-y" 
+							  shadow-intensity="1" exposure="1" src="https://www.sfu.ca/~fuyangz/mvdiffusion/mesh/scene0741_00_0.glb" 
+							  poster="/assets/meshes2/scene0741_00_0.png" id="mesh-scene0741_00_0" ar-status="not-presenting">
+                </model-viewer>
+            </div>
+            <div class="col-md-12">
+                <p class="text-center">Prompt: A bed with a blue comforter and a vase with purple flowers. Two backpacks are sitting on the floor next to the bed. 
+                    A window with a curtain is next to the bed.</p>
+            </div>
+        </div>
+		
+		<div class="row captioned_videos meshes" id="randomVideos-4">
+            <div class="col-4">
+                <p class="text-center">Mesh w/o texture</p>
+            </div>
+            <div class="col-4">
+                <p class="text-center">Input depth | Pred texture</p>
+            </div>
+            <div class="col-4 controls">
+                    <button class="btn btn-primary loads-model" data-controls="mesh-scene0749_00_0" data-action="load">Load 3D model</button>
+            </div>
+            <div class="col-4">
+                <img src="/assets/meshes2/scene0749_00_0_non_texture.png" alt="" style="width: 100%">
+            </div>
+			<div class="col-4">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="ex6" loop playsinline autoplay muted onplay="resizeAndPlay(this)" style="height: 0px;">
+                        <source data-src="https://www.sfu.ca/~fuyangz/mvdiffusion/depth_video/scene0749_00_0.mp4" type="video/mp4"></source>
+                    </video>
+                    <canvas height="752" class="videoMerge" id="ex6Merge" width="1002"></canvas>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-4 my-auto">
+                <model-viewer ar="true" ar-modes="webxr scene-viewer quick-look" loading="lazy" reveal="manual" 
+							  style="height: 180px; width: 100%;" camera-controls="true" touch-action="pan-y" 
+							  shadow-intensity="1" exposure="1" src="https://www.sfu.ca/~fuyangz/mvdiffusion/mesh/scene0749_00_0.glb" 
+							  poster="/assets/meshes2/scene0749_00_0.png" id="mesh-scene0749_00_0" ar-status="not-presenting">
+                </model-viewer>
+            </div>
+            <div class="col-md-12">
+                <p class="text-center">Prompt: A white stove top oven and a white refrigerator freezer sitting inside of a kitchen. The kitchen with a sink, dishwasher, and a microwave.
+                    A wooden table and chairs in the kitchen.
+                </p>
+            </div>
+        </div>
+		
+    </div>
+
+    <!--
+    <hr class="divider" />
+    <div class="container" style="max-width: 768px;">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>How does MVDiffusion work?</h2>
+                <p>
+                    Pipeline figure and videos here
+                </p>
+            </div>
+        </div>
+    </div>
+    -->
+
+    <hr class="divider" />
+    <div class="container" style="max-width: 768px;">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Citation</h2>
+                <code>
+                    @article{Tang2023mvdiffusion,<br>
+                    &nbsp; author = {Tang, Shitao and Zhang, Fuyang and Chen, Jiacheng and Wang, Peng and Furukawa, Yasutaka},<br>
+                    &nbsp; title  = {MVDiffusion: Enabling Holistic Multi-view Image Generation with Correspondence-Aware Diffusion},<br>
+                    &nbsp; journal = {arXiv},<br>
+                    &nbsp; year   = {2023},<br>
+                }</code>
+            </div>
+        </div>
+    </div>
+    
+    <hr class="divider" />
+    <div class="container" style="max-width: 768px;">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Acknowledgements</h2>
+                <p> This research is partially supported by NSERC Discovery Grants with Accelerator Supplements and DND/NSERC Discovery Grant Supplement, NSERC Alliance Grants, and John R. Evans Leaders Fund (JELF). We thank the Digital Research Alliance of Canada and BC DRI Group for providing computational resources. </p>
+            </div>
+        </div>
+    </div>
+
+
+    <hr class="divider" />
+    <div class="container" style="max-width: 768px;">
+        <footer>
+            <p> Website template from <a href="https://dreamfusion3d.github.io/">DreamFusion</a>. We thank the authors for the open-source code.</p>
+        </footer>
+    </div>
+    <script src="https://polyfill.io/v3/polyfill.js?features=IntersectionObserver"></script>
+    <script src="/assets/js/yall.js"></script>
+    <script>
+        yall(
+            {
+                observeChanges: true
+            }
+        );
+    </script>
+    <script src="/assets/js/scripts_v2.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+    <!-- <script src="https://uploads-ssl.webflow.com/51e0d73d83d06baa7a00000f/js/webflow.fd002feec.js"></script> -->
+    <!-- Import the component -->
+
+<script>
+  function openImage(imageName) {
+    window.open(imageName, '_blank');
+  }
+</script>
+
+</body>
+
+</html>
