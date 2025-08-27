@@ -14,7 +14,7 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>MVDiffusion: Enabling Holistic Multi-view Image Generation with Correspondence-Aware Diffusion</title>
+    <title>B-Rep Distance Functions</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
     <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,500,600' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="/assets/css/Highlight-Clean.css">
@@ -22,18 +22,16 @@
 
     <link rel="manifest" href="/site.webmanifest">
 
-    <meta property="og:site_name" content="MVDiffusion" />
+    <meta property="og:site_name" content="BRDF" />
     <meta property="og:type" content="video.other" />
-    <meta property="og:title" content="MVDiffusion: Enabling Holistic Multi-view Image Generation with Correspondence-Aware Diffusion" />
-    <meta property="og:description" content="MVDiffusion, 2023." />
-    <meta property="og:url" content="https://mvdiffusion.github.io/" />
+    <meta property="og:title" content="BRDF" />
+    <meta property="og:description" content="BRDF, 2025." />
+    <meta property="og:url" content="https://zhangfuyang.github.io/brdf/" />
 
-    <meta property="article:publisher" content="https://mvdiffusion.github.io/" />
+    <meta property="article:publisher" content="https://zhangfuyang.github.io/brdf/" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="MVDiffusion: Enabling Holistic Multi-view Image Generation with Correspondence-Aware Diffusion" />
-    <meta name="twitter:url" content="https://mvdiffusion.github.io/" />
-    <!-- <meta name="twitter:image" content="https://dreamfusion3d.github.io/assets/images/dreamfusion_samples.png" /> -->
-    <!-- <meta name="twitter:site" content="" /> -->
+    <meta name="twitter:title" content="B-Rep Distance Functions (BR-DF). How to Represent a B-Rep Model by Volumetric Distance Functions?" />
+    <meta name="twitter:url" content="https://zhangfuyang.github.io/brdf/" />
 
     <script src="assets/js/video_comparison.js"></script>
     <script type="module" src="https://unpkg.com/@google/model-viewer@2.0.1/dist/model-viewer.min.js"></script>
@@ -56,25 +54,22 @@
 <body>
     <div class="highlight-clean" style="padding-bottom: 10px;">
         <div class="container" style="max-width: 1000px;">
-            <h1 class="text-center"><b>MVDiffusion</b>: Enabling Holistic Multi-view Image Generation with Correspondence-Aware Diffusion </h1>
-            <h5 class="text-center"> <b>NeurIPS 2023 (spotlight)</b> </h5>
+            <h1 class="text-center">B-Rep Distance Functions (BR-DF) </h1>
+            <h1 class="text-center"> How to Represent a B-Rep Model by Volumetric Distance Functions? </h1>
         </div>
         <div class="container" style="max-width: 980px;">
             <div class="row authors">
                 <div class="col">
-                    <h5 class="text-center"><a class="text-center" href="https://tangshitao.github.io/">Shitao Tang<sup>*1</sup> </a></h5>
+                    <h5 class="text-center"><a href="https://zhangfuyang.github.io/">Fuyang Zhang<sup>1</sup></a></h5>
                 </div>
                 <div class="col">
-                    <h5 class="text-center"><a href="https://zhangfuyang.github.io/">Fuyang Zhang<sup>*1</sup></a></h5>
+                    <h5 class="text-center"><a class="text-center" href="https://pradeep-pyro.github.io/">Pradeep Kumar Jayaraman<sup>2</sup></a></h5>
                 </div>
                 <div class="col">
-                    <h5 class="text-center"><a class="text-center" href="https://jcchen.me/">Jiacheng Chen<sup>1</sup></a></h5>
+                    <h5 class="text-center"><a class="text-center" href="https://samxuxiang.github.io/">Xiang Xu<sup>2</sup></a></h5>
                 </div>
                 <div class="col">
-                    <h5 class="text-center"><a class="text-center" href="https://pengwangucla.github.io/peng-wang.github.io/">Peng Wang<sup>2</sup></a></h5>
-                </div>
-                <div class="col">
-                    <h5 class="text-center"><a class="text-center" href="https://www.cs.sfu.ca/~furukawa/">Yasutaka Furukawa<sup>1</sup></a></h5>
+                    <h5 class="text-center"><a class="text-center" href="https://www.cs.sfu.ca/~furukawa/">Yasutaka Furukawa<sup>1,3</sup></a></h5>
                 </div>
             </div>
             <div class="row affiliations">
@@ -83,6 +78,9 @@
                 </div>
                 <div class="col">
                     <h6 class="text-center"><a class="text-center"><sup>2</sup>Bytedance</a></h6>
+                </div>
+                <div class="col">
+                    <h6 class="text-center"><a class="text-center"><sup>3</sup>Wayve</a></h6>
                 </div>
             </div>
         </div>
@@ -112,16 +110,6 @@
                 </svg>
                 Code
             </a>
-            <a class="btn btn-light" role="button" href="gallery.html">
-                <svg style="width:24px;height:24px;margin-left:-12px;margin-right:12px" width="24px" height="24px" viewBox="0 0 375 531">
-                    <polygon stroke="#000000" points="0.5,0.866 459.5,265.87 0.5,530.874 "/>
-                </svg>
-                Gallery
-            </a>
-            <a class="btn btn-light" role="button" href="https://huggingface.co/spaces/tangshitao/MVDiffusion">
-                <img style="width:24px;height:24px;margin-left:-1px;margin-right:8px" width="24px" height="24px" viewBox="0 0 375 531" src="hf-logo.svg" alt="Hugging Face Logo">
-                Demo
-            </a>
         </div>
     </div>
 	<div class="container" style="max-width: 768px;">
@@ -129,42 +117,24 @@
             <div class="col-md-12">
                 <h2>Abstract</h2>
                 <p>
-                    This paper introduces <em>MVDiffusion</em>, a simple yet effective method for generating
-                    consistent multi-view images from text prompts given pixel-to-pixel correspondences (e.g., perspective crops from a panorama or multi-view images given depth maps and poses). 
-                    <span id="expand_button" class="expand-link" onclick="expand('expand_button', 'long-abs', 'collapse_button')">[Expand]</span>
-                    <span id="long-abs" class="expandable-content">
-                        Unlike prior methods that rely on iterative image warping and inpainting, MVDiffusion simultaneously generates all images with a global awareness, effectively addressing the prevalent error accumulation issue. At its core, MVDiffusion processes perspective images in parallel with a pre-trained text-toimage diffusion model, while integrating novel correspondence-aware attention layers to facilitate cross-view interactions. For panorama generation, while only trained with 10k panoramas, MVDiffusion is able to generate high-resolution photorealistic images for arbitrary texts or extrapolate one perspective image to a 360-degree view. For multi-view depth-to-image generation, MVDiffusion demonstrates state-of-the-art performance for texturing a scene mesh.
-                    </span>
-                    <p id="collapse_button" class="expand-link" style="display: none;" onclick="collapse('expand_button', 'long-abs', 'collapse_button')">[Collapse]</p>
+                    This paper presents a novel geometric representation for CAD Boundary Representation (B-Rep) based on volumetric distance functions, dubbed B-Rep Distance Functions (BR-DF). BR-DF encodes the surface mesh geometry of a CAD model as signed distance function (SDF). B-Rep vertices, edges, faces and their topology information are encoded as per-face unsigned distance functions (UDFs). An extension of the classical Marching Cubes algorithm converts BR-DF directly into watertight CAD B-Rep model (strictly speaking a faceted B-Rep model). A surprising characteristic of BR-DF is that this conversion process never fails. Leveraging the volumetric nature of BR-DF, we also propose a multi-branch latent diffusion with 3D UNet backbone for jointly generating the SDF and per-face UDFs of a BR-DF model. Our approach achieves comparable CAD generation performance against SOTA methods while reaching the unprecedented 100% success rate in producing (faceted) B-Rep models.
                 </p>
             </div>
-            <script>
-                function expand(exp_buttonId, longId, col_buttonID) {
-                  var expElement = document.getElementById(exp_buttonId);
-                  var longElement = document.getElementById(longId);
-                  var colElement = document.getElementById(col_buttonID);
-                  expElement.style.display = 'none';
-                  longElement.style.display = 'inline';
-                  colElement.style.display = 'block';
-                }
-
-                function collapse(exp_buttonId, longId, col_buttonID) {
-                  var expElement = document.getElementById(exp_buttonId);
-                  var longElement = document.getElementById(longId);
-                  var colElement = document.getElementById(col_buttonID);
-                  expElement.style.display = 'inline';
-                  longElement.style.display = 'none';
-                  colElement.style.display = 'none';
-                }
-            </script>
         </div>
     </div>
     <hr class="divider" />
     <div class="container" style="max-width: 768px;">
         <div class="row captioned_videos">
             <div class="col-md-12">
-                <img src="assets/images/teaser_v2.gif" alt="Image Description" style="width:100%">
+                <img src="assets/images/steaser_v2.gif" alt="Image Description" style="width:100%">
                 <h6 class="caption"> Given text descriptions, MVDiffusion generates holistically consistent multi-view images with high resolution and rich content, which benefits practical tasks such as panorama generation and multi-view depth-to-image generation. </h6>
+            </div>
+        </div>
+    </div>
+	<div class="container" style="max-width: 768px;">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Method Overview</h2>
             </div>
         </div>
     </div>
