@@ -33,9 +33,6 @@
     <meta name="twitter:title" content="B-Rep Distance Functions (BR-DF). How to Represent a B-Rep Model by Volumetric Distance Functions?" />
     <meta name="twitter:url" content="https://zhangfuyang.github.io/brdf/" />
 
-    <script src="assets/js/video_comparison.js"></script>
-    <script type="module" src="https://unpkg.com/@google/model-viewer@2.0.1/dist/model-viewer.min.js"></script>
-
     <style>
     .expandable-content {
       display: none;
@@ -77,7 +74,7 @@
                     <h6 class="text-center"><a class="text-center"><sup>1</sup>Simon Fraser University</a></h6>
                 </div>
                 <div class="col">
-                    <h6 class="text-center"><a class="text-center"><sup>2</sup>AutoDesk</a></h6>
+                    <h6 class="text-center"><a class="text-center"><sup>2</sup>Autodesk</a></h6>
                 </div>
                 <div class="col">
                     <h6 class="text-center"><a class="text-center"><sup>3</sup>Wayve</a></h6>
@@ -101,7 +98,7 @@
                 </svg>
                 Project
             </a>
-            <a class="btn btn-light" role="button" href="https://github.com/Tangshitao/MVDiffusion">
+            <a class="btn btn-light" role="button" href="https://github.com/zhangfuyang/BR-DF">
                 <svg xmlns="http://www.w3.org/2000/svg" style="width:24px;height:24px;margin-left:-12px;margin-right:12px" viewBox="0 0 24 24">
                     <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 
                             1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 
@@ -124,17 +121,21 @@
     </div>
     <hr class="divider" />
     <div class="container" style="max-width: 768px;">
-        <div class="row captioned_videos">
+        <div class="row">
             <div class="col-md-12">
-                <img src="assets/images/steaser_v2.gif" alt="Image Description" style="width:100%">
-                <h6 class="caption"> Given text descriptions, MVDiffusion generates holistically consistent multi-view images with high resolution and rich content, which benefits practical tasks such as panorama generation and multi-view depth-to-image generation. </h6>
+                <h2>BR-DF</h2>
+                <img src="assets/images/teaser_v3.jpg" alt="Image Description" style="width:100%">
+                <h6 class="caption"> BR-DF is a novel geometric representation for CAD Boundary Representation (B-Rep) models, where an SDF encodes surface geometry, and UDFs represent B-Rep vertices, edges, faces, and their connectivity. A simple extension of the Marching Cubes algorithm can reliably convert BR-DF into faceted B-Rep model with 100% success rate. </h6>
             </div>
         </div>
     </div>
+    <hr class="divider" />
 	<div class="container" style="max-width: 768px;">
         <div class="row">
             <div class="col-md-12">
-                <h2>Method Overview</h2>
+                <h2>BRep Conversion</h2>
+                <img src="assets/images/mcbt_expand.jpg" alt="Image Description" style="width:100%">
+                <h6 class="caption"> Step 1: Given the volumetric UDFs for each face, the UDF value at each mesh vertex is computed using linear interpolation. Step 2: Each mesh vertex selects the face with the smallest UDF value. Step 3: B-Rep vertices and edges are extracted by applying the 3-way rules as illustrated at the bottom of the figure. </h6>
 
             </div>
         </div>
@@ -143,8 +144,7 @@
     <div class="container" style="max-width: 768px;">
         <div class="row">
             <div class="col-md-12">
-                <h2>Results showcase</h2>
-                <p> We show the capacity of MVDiffusion on two challanging multi-view image generation tasks: 1) panorama generation and 2) multi-view depth-to-image generation. </p>
+                <h2>Results</h2>
             </div>
         </div>
     </div>
@@ -152,9 +152,15 @@
     <div class="container" style="max-width: 768px;">
         <div class="row">
             <div class="col-md-12">
-                <h4>Task 1: Panorama generation </h4>
-                <h6> (Note: click the text to view the stitched panorama image) </h6>
-                <p> Examples results of panorama generation from text prompts using MVDiffusion. Check out our online <a href='https://huggingface.co/spaces/tangshitao/MVDiffusion'>demo</a> to generate panorama images using your own descriptions. </p>
+                <img src="assets/images/result.jpg" alt="Image Description" style="width:100%">
+                <h6 class="caption" style="text-align: center;"> Unconditional generation results on DeepCAD dataset. Our method achieves comparable performance to the state-of-the-art methods, while maintaining 100% success rate. </h6>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-12">
+                <img src="assets/images/abc_result.jpg" alt="Image Description" style="width:100%">
+                <h6 class="caption" style="text-align: center;"> Unconditional generation results on the ABC dataset. </h6>
             </div>
         </div>
 
@@ -168,11 +174,11 @@
             <div class="col-md-12">
                 <h2>Citation</h2>
                 <code>
-                    @article{Tang2023mvdiffusion,<br>
-                    &nbsp; author = {Tang, Shitao and Zhang, Fuyang and Chen, Jiacheng and Wang, Peng and Furukawa, Yasutaka},<br>
-                    &nbsp; title  = {MVDiffusion: Enabling Holistic Multi-view Image Generation with Correspondence-Aware Diffusion},<br>
+                    @article{Zhang2025brdf,<br>
+                    &nbsp; author = {Zhang, Fuyang and Jayaraman, Pradeep Kumar and Xu, Xiang and Furukawa, Yasutaka},<br>
+                    &nbsp; title  = {B-Rep Distance Functions (BR-DF) How to Represent a B-Rep Model by Volumetric Distance Functions?},<br>
                     &nbsp; journal = {arXiv},<br>
-                    &nbsp; year   = {2023},<br>
+                    &nbsp; year   = {2025},<br>
                 }</code>
             </div>
         </div>
@@ -183,7 +189,7 @@
         <div class="row">
             <div class="col-md-12">
                 <h2>Acknowledgements</h2>
-                <p> This research is partially supported by NSERC Discovery Grants with Accelerator Supplements and DND/NSERC Discovery Grant Supplement, NSERC Alliance Grants, and John R. Evans Leaders Fund (JELF). We thank the Digital Research Alliance of Canada and BC DRI Group for providing computational resources. </p>
+                <p> This research is partially supported by NSERC Discovery Grants, NSERC Alliance Grants, and John R. Evans Leaders Fund (JELF). We thank the Digital Research Alliance of Canada and BC DRI Group for providing computational resources. </p>
             </div>
         </div>
     </div>
